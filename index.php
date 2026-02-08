@@ -13,6 +13,7 @@ define('LOGO_PATH', 'https://traceverisys.com/logo/logo.jpeg');
 const PACKAGES = [
     'Package 1 Month' => ['limit' => 250, 'days' => 30],
     'Package 15 Days' => ['limit' => 150, 'days' => 15],
+    'Package 2 Days' => ['limit' => 15, 'days' => 2],
 ];
 
 // --- DATABASE SETUP ---
@@ -245,7 +246,7 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
         .nav-link { color: #94a3b8; padding: 12px 20px; transition: 0.2s; }
         .nav-link:hover, .nav-link.active { color: white; background: #1e293b; border-left: 4px solid #3b82f6; }
         .result-card { background: white; border-radius: 12px; overflow: hidden; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; page-break-inside: avoid; break-inside: avoid; }
-        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; position: relative; } .main-content { padding: 20px; } .sidebar .nav { flex-direction: row; flex-wrap: wrap; justify-content: center; } }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; position: relative; } .main-content { padding: 20px; } .sidebar .nav { flex-direction: row; flex-wrap: wrap; } .nav-link { flex: 1; text-align: center; } }
         .result-header { background: #1e293b; color: white; padding: 10px 15px; font-size: 0.8rem; font-weight: bold; }
         .result-table { width: 100%; margin: 0; border-collapse: collapse; }
         .result-table td { padding: 10px 15px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; }
@@ -488,7 +489,7 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
                     <tbody>
                         <?php foreach($pdo->query("SELECT * FROM apis") as $api): ?>
                         <tr><td class="fw-bold"><?= $api['api_name'] ?></td><td class="small text-muted"><?= $api['api_url_template'] ?></td><td>
-                            <form method="POST"><input type="hidden" name="action" value="delete_api"><input type="hidden" name="api_id" value="<?= $api['id'] ?>"><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></form>
+                            <form method="POST"><input type="hidden" name="action" value="delete_api"><input type="hidden" name="api_id" value="<?= $api['id'] ?>"><button class="btn btn-sm btn-danger">Delete</button></form>
                         </td></tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -502,7 +503,7 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
         function exportPDF() {
             const query = document.getElementById('query').value.trim() || 'Results';
             const element = document.getElementById('results');
-            const opt = { margin: [0.3, 0.3], filename: 'Report_' + query + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } };
+            const opt = { margin: [0.3, 0.3], filename: 'Report_' + query + '.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } };
             html2pdf().set(opt).from(element).save();
         }
         function filterUsers() {
