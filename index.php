@@ -1,15 +1,50 @@
 <?php
-// Existing code remains untouched
+// CSS Reset
+header, footer, main, section, article, div, p, h1, h2, h3, h4, h5, h6, ul, ol { margin: 0; padding: 0; box-sizing: border-box; }
 
-// 1) Show user creation date and package expiry date in manage_users table
-// Code to retrieve and display these values from the database goes here
+// Initialize user count
+$totalUsers = 0;
 
-// 2) Show user renewal date if renewed
-// Code for checking and displaying renewal date
+// User Creation Date
+function createUser($username) {
+    $creationDate = date('Y-m-d H:i:s'); // Current date and time
+    // Add user to database with creation date
+}
 
-// 3) Add new page to display all blocked users
-// Routing and logic to display blocked users
+// Package Expiry Dates
+function setPackageExpiry($userId, $days = 2) {
+    $expiryDate = date('Y-m-d H:i:s', strtotime('+'.$days.' days'));
+    // Update package expiry in database for user
+}
 
-// 4) Display total user count for regular users in accounts section
-// Code to get total count and display it in accounts section
+// User Renewal Dates
+function renewUser($userId) {
+    // Logic to renew user and set new renewal date
+}
+
+// Blocked Users Management
+function blockUser($userId) {
+    // Update database to block user
+}
+
+function getBlockedUsers() {
+    // Fetch and return blocked users from database
+}
+
+// Function to count total users
+function getTotalUsers() {
+    global $totalUsers;
+    // Logic to count and return total users from database
+}
+
+// Plain text password authentication
+function authenticate($username, $password) {
+    // Logic to authenticate without hashing
+}
+
+// Search Functions
+function enableSearch($userId) {
+    $searchLimit = 15; // Package provides 15 searches for 2 Days
+    // Logic to enable searches for the user
+}
 ?>
