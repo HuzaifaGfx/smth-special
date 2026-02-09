@@ -380,10 +380,13 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
                     <div class="col-md-3"><input type="text" name="new_username" class="form-control" placeholder="Username" required></div>
                     <div class="col-md-3">
                         <select name="new_role" class="form-select">
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                            <?php if(is_super()): ?><option value="superadmin">Super Admin</option><?php endif; ?>
-                        </select>
+    <option value="user">User</option>
+    <?php if(is_super()): ?>
+        <option value="admin">Admin</option>
+        <option value="superadmin">Super Admin</option>
+    <?php endif; ?>
+</select>
+
                     </div>
                     <div class="col-md-3">
                         <select name="package_name" class="form-select">
