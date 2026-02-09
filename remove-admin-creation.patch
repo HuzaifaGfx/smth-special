@@ -1,0 +1,19 @@
+diff --git a/index.php b/index.php
+index d5e835c..abcd123 100644
+--- a/index.php
++++ b/index.php
+@@ -XXX,7 +XXX,13 @@
+-    <select name="new_role" required>
+-        <option value="user">User</option>
+-        <option value="admin">Admin</option>
+-    </select>
++    <?php if ($_SESSION['role'] === 'superadmin'): ?>
++        <select name="new_role" required>
++            <option value="user">User</option>
++            <option value="admin">Admin</option>
++        </select>
++    <?php else: ?>
++        <select name="new_role" required>
++            <option value="user">User</option>
++        </select>
++    <?php endif; ?>
