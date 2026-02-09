@@ -379,10 +379,17 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
                     <div class="col-md-3"><input type="text" name="new_username" class="form-control" placeholder="Username" required></div>
                     <div class="col-md-3">
                         <?php if ($_SESSION['role'] === 'superadmin'): ?>
+    <?php if ($_SESSION['role'] === 'superadmin'): ?>
     <select name="new_role" required>
         <option value="user">User</option>
         <option value="admin">Admin</option>
     </select>
+<?php else: ?>
+    <select name="new_role" required>
+        <option value="user">User</option>
+    </select>
+<?php endif; ?>
+
 <?php else: ?>
     <select name="new_role" required>
         <option value="user">User</option>
