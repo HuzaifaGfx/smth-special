@@ -13,6 +13,7 @@ define('LOGO_PATH', 'https://traceverisys.com/logo/logo.jpeg');
 const PACKAGES = [
     'Package 1 Month' => ['limit' => 250, 'days' => 30],
     'Package 15 Days' => ['limit' => 150, 'days' => 15],
+    'Package 7 Days' => ['limit' => 50, 'days' => 7],
     'Package 2 Days' => ['limit' => 15, 'days' => 2],
 ];
 
@@ -378,24 +379,11 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
                     <input type="hidden" name="action" value="create_user">
                     <div class="col-md-3"><input type="text" name="new_username" class="form-control" placeholder="Username" required></div>
                     <div class="col-md-3">
-                        <?php if ($_SESSION['role'] === 'superadmin'): ?>
-    <?php if ($_SESSION['role'] === 'superadmin'): ?>
-    <select name="new_role" required>
-        <option value="user">User</option>
-        <option value="admin">Admin</option>
-    </select>
-<?php else: ?>
-    <select name="new_role" required>
-        <option value="user">User</option>
-    </select>
-<?php endif; ?>
-
-<?php else: ?>
-    <select name="new_role" required>
-        <option value="user">User</option>
-    </select>
-<?php endif; ?>
-
+                        <select name="new_role" class="form-select">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                            <?php if(is_super()): ?><option value="superadmin">Super Admin</option><?php endif; ?>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <select name="package_name" class="form-select">
