@@ -25,6 +25,10 @@ function is_admin_or_super() {
     return is_logged_in() && ($r === 'admin' || $r === 'superadmin');
 }
 
+function is_superadmin_username() {
+    return isset($_SESSION['username']) && $_SESSION['username'] === 'superadmin';
+}
+
 function require_login() {
     if (!is_logged_in()) {
         redirect('?page=login');
@@ -40,6 +44,12 @@ function require_admin() {
 function require_super() {
     if (!is_super()) {
         die('Access Denied');
+    }
+}
+
+function require_superadmin_username() {
+    if (!is_superadmin_username()) {
+        die('Access Denied: Only the superadmin user can access this page.');
     }
 }
 
