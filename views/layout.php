@@ -35,7 +35,7 @@
                 <a class="nav-link <?= $route == 'manage_users' ? 'active' : '' ?>" href="?page=manage_users"><i class="fas fa-users-cog me-2"></i> Accounts</a>
                 <a class="nav-link <?= $route == 'blocked_users' ? 'active' : '' ?>" href="?page=blocked_users"><i class="fas fa-ban me-2"></i> Blocked Users</a>
             <?php endif; ?>
-            <?php if (is_super()): ?>
+            <?php if (is_superadmin_username()): ?>
                 <a class="nav-link <?= $route == 'manage_apis' ? 'active' : '' ?>" href="?page=manage_apis"><i class="fas fa-link me-2"></i> API Config</a>
             <?php endif; ?>
             <a class="nav-link text-danger mt-auto mb-4" href="?page=logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
