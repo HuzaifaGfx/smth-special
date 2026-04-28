@@ -60,7 +60,9 @@ try {
 function redirect($url) { header("Location: " . $url); exit; }
 function is_logged_in() { return isset($_SESSION['user_id']); }
 function get_role() { return $_SESSION['role'] ?? 'user'; }
+function get_username() { return $_SESSION['username'] ?? ''; }
 function is_super() { return get_role() === 'superadmin'; }
+function is_superadmin_user() { return get_role() === 'superadmin' && get_username() === 'superadmin'; }
 function is_admin_or_super() { 
     $r = get_role();
     return is_logged_in() && ($r === 'admin' || $r === 'superadmin'); 
@@ -96,6 +98,11 @@ function execute_multi_curl($apis) {
 
 $route = $_GET['page'] ?? (is_logged_in() ? 'dashboard' : 'login');
 if ($route === 'logout') { session_destroy(); redirect('?page=login'); }
+
+// Redirect non-superadmin users trying to access manage_apis
+if ($route === 'manage_apis' && !is_superadmin_user()) {
+    redirect('?page=dashboard');
+}
 
 $message = ''; $error = '';
 
@@ -253,7 +260,7 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
         .nav-link { color: #94a3b8; padding: 12px 20px; transition: 0.2s; display: block; text-decoration: none; }
         .nav-link:hover, .nav-link.active { color: white; background: #1e293b; border-left: 4px solid #3b82f6; }
         .result-card { background: white; border-radius: 12px; overflow: hidden; border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; page-break-inside: avoid; break-inside: avoid; }
-        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; position: relative; } .main-content { padding: 20px; } .sidebar .nav { flex-direction: row; flex-wrap: wrap; } .nav-link { flex: 1; text-align: center; } }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; position: relative; } .main-content { padding: 20px; } .sidebar .nav { flex-direction: row; flex-wrap: wrap; } }
         .result-header { background: #1e293b; color: white; padding: 10px 15px; font-size: 0.8rem; font-weight: bold; }
         .result-table { width: 100%; margin: 0; border-collapse: collapse; }
         .result-table td { padding: 10px 15px; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; }
@@ -287,7 +294,7 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
                 <a class="nav-link <?= $route == 'manage_users' ? 'active' : '' ?>" href="?page=manage_users"><i class="fas fa-users-cog me-2"></i> Accounts</a>
                 <a class="nav-link <?= $route == 'blocked_users' ? 'active' : '' ?>" href="?page=blocked_users"><i class="fas fa-ban me-2"></i> Blocked Users</a>
             <?php endif; ?>
-            <?php if (is_super()): ?>
+            <?php if (is_superadmin_user()): ?>
                 <a class="nav-link <?= $route == 'manage_apis' ? 'active' : '' ?>" href="?page=manage_apis"><i class="fas fa-link me-2"></i> API Config</a>
             <?php endif; ?>
             <a class="nav-link text-danger mt-auto mb-4" href="?page=logout"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
@@ -380,13 +387,12 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
                     <div class="col-md-3"><input type="text" name="new_username" class="form-control" placeholder="Username" required></div>
                     <div class="col-md-3">
                         <select name="new_role" class="form-select">
-    <option value="user">User</option>
-    <?php if(is_super()): ?>
-        <option value="admin">Admin</option>
-        <option value="superadmin">Super Admin</option>
-    <?php endif; ?>
-</select>
-
+                            <option value="user">User</option>
+                            <?php if(is_super()): ?>
+                                <option value="admin">Admin</option>
+                                <option value="superadmin">Super Admin</option>
+                            <?php endif; ?>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <select name="package_name" class="form-select">
@@ -559,7 +565,7 @@ if ($route === 'dashboard' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_P
             </div>
             <?php endif; ?>
 
-        <?php elseif ($route === 'manage_apis' && is_super()): ?>
+        <?php elseif ($route === 'manage_apis' && is_superadmin_user()): ?>
             <div class="card p-4 mb-4 border-0 shadow-sm">
                 <h5 class="fw-bold mb-3">Add API Source</h5>
                 <form method="POST" class="row g-2">
