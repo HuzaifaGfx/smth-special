@@ -36,6 +36,12 @@ if ($route === 'login' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
     $_SESSION['captcha_ans'] = $_SESSION['captcha_n1'] + $_SESSION['captcha_n2'];
 }
 
+// Restrict access to API management page (only username 'superadmin')
+if ($route === 'manage_apis' && !is_superadmin_username()) {
+    $error = 'Access Denied: Only the superadmin user can access API Management.';
+    $route = 'dashboard';
+}
+
 // Handle POST requests
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Login logic
