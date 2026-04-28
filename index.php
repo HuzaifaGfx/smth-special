@@ -29,11 +29,17 @@ if ($route === 'logout') {
     logout();
 }
 
-// Handle GET routes
-if ($route === 'login' && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-    $_SESSION['captcha_n1'] = rand(1, 9);
-    $_SESSION['captcha_n2'] = rand(1, 9);
-    $_SESSION['captcha_ans'] = $_SESSION['captcha_n1'] + $_SESSION['captcha_n2'];
+// Initialize captcha for login page
+if ($route === 'login') {
+    if (!isset($_SESSION['captcha_n1'])) {
+        $_SESSION['captcha_n1'] = rand(1, 9);
+    }
+    if (!isset($_SESSION['captcha_n2'])) {
+        $_SESSION['captcha_n2'] = rand(1, 9);
+    }
+    if (!isset($_SESSION['captcha_ans'])) {
+        $_SESSION['captcha_ans'] = $_SESSION['captcha_n1'] + $_SESSION['captcha_n2'];
+    }
 }
 
 // Restrict access to API management page (only username 'superadmin')
@@ -73,6 +79,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Redirect to login if not logged in (except for login page)
 if (!is_logged_in() && $route !== 'login') {
     $route = 'login';
+    // Initialize captcha when redirecting to login
+    if (!isset($_SESSION['captcha_n1'])) {
+        $_SESSION['captcha_n1'] = rand(1, 9);
+    }
+    if (!isset($_SESSION['captcha_n2'])) {
+        $_SESSION['captcha_n2'] = rand(1, 9);
+    }
+    if (!isset($_SESSION['captcha_ans'])) {
+        $_SESSION['captcha_ans'] = $_SESSION['captcha_n1'] + $_SESSION['captcha_n2'];
+    }
 }
 
 // Load layout
